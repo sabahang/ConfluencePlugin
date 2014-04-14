@@ -1,0 +1,48 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <web-section key="AccessCheckerPluginSection" name="AccessChecker" location="system.admin" weight="1000">
+        <label key="Nortal" />
+    </web-section>
+
+    <web-item key="AccessCheckerPluginLink" name="AccessChecker" section="system.admin/AccessChecker" weight="1000">
+        <description>Link to xwork module where admin can check a user's accessible spaces</description>
+        <label key="AccessCheckerPlugin" />
+        <link linkId="link-to-access-checker-action">/admin-actions/accessChecker.action</link>
+    </web-item>
+    
+	<xwork name="Nortal Admin actions" key="admin-actions">
+        <package name="nortalAdminActions" extends="default" namespace="/admin-actions">
+            <default-interceptor-ref name="defaultStack" />
+            <action name="accessChecker" class="com.sabahang.webitemz.AccessChecker">
+                <result name="success" type="velocity">/firstvm.vm</result>
+            </action>
+        </package>
+    </xwork>
+    
+    <!-- add our web resources -->
+    <web-resource key="webitemz-resources" name="webitemz Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="webitemz.css" location="/css/webitemz.css"/>
+        <resource type="download" name="webitemz.js" location="/js/webitemz.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>webitemz</context>
+    </web-resource>
+    
+    <!-- publish our component -->
+    <component key="myPluginComponent" class="com.sabahang.webitemz.MyPluginComponentImpl" public="true">
+        <interface>com.sabahang.webitemz.MyPluginComponent</interface>
+    </component>
+    
+    <!-- import from the product container -->
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+    
+</atlassian-plugin>
